@@ -14,46 +14,20 @@ Pod::Spec.new do |s|
   s.homepage          = 'http://hockeyapp.net/'
   s.documentation_url = "http://hockeyapp.net/help/sdk/ios/#{s.version}/"
 
-  s.license           = { :type => 'MIT', :file => 'HockeySDK-iOS/LICENSE' }
+  s.license           = 'MIT'
   s.author            = { 'Microsoft' => 'support@hockeyapp.net' }
+  s.source            = { :git => 'https://github.com/bitstadium/HockeySDK-iOS.git', :tag => s.version.to_s }
 
   s.platform          = :ios, '7.0'
+  s.source_files      = 'Classes'
   s.requires_arc      = true
   
-  s.preserve_path = 'HockeySDK-iOS/README.md'
-
-  s.source = { :http => "https://github.com/bitstadium/HockeySDK-iOS/releases/download/#{s.version}/HockeySDK-iOS-#{s.version}.zip" }
-
-  s.frameworks = 'Foundation', 'Security', 'SystemConfiguration'
-  s.libraries = 'c++'
-
-  s.default_subspec   = 'DefaultLib'
-  
-  s.subspec 'CrashOnlyLib' do |ss|
-    ss.frameworks = 'UIKit'
-    ss.libraries = 'z'
-    ss.resource_bundle = { 'HockeySDKResources' => ['HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/*.lproj'] }
-    ss.vendored_frameworks = 'HockeySDK-iOS/HockeySDKCrashOnly/HockeySDK.framework'
-  end
-
-  s.subspec 'CrashOnlyExtensionsLib' do |ss|
-    ss.vendored_frameworks = 'HockeySDK-iOS/HockeySDKCrashOnlyExtension/HockeySDK.framework'
-  end
-
-  s.subspec 'DefaultLib' do |ss|
-    ss.resource_bundle = { 'HockeySDKResources' => ['HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/*.png', 'HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDKResources.bundle/*.lproj'] }
-
-    ss.frameworks = 'CoreGraphics', 'CoreText', 'CoreTelephony', 'MobileCoreServices', 'QuartzCore', 'QuickLook', 'UIKit'
-    ss.libraries = 'z'
-    ss.vendored_frameworks = 'HockeySDK-iOS/HockeySDK.embeddedframework/HockeySDK.framework'
-  end
-
-  s.subspec 'AllFeaturesLib' do |ss|
-    ss.resource_bundle = { 'HockeySDKResources' => ['HockeySDK-iOS/HockeySDKAllFeatures/HockeySDK.embeddedframework/HockeySDKResources.bundle/*.png', 'HockeySDK-iOS/HockeySDKAllFeatures/HockeySDK.embeddedframework/HockeySDKResources.bundle/*.lproj'] }
-
-    ss.frameworks = 'AssetsLibrary', 'CoreGraphics', 'CoreText', 'CoreTelephony', 'MobileCoreServices', 'Photos', 'QuartzCore', 'QuickLook', 'UIKit'
-    ss.libraries = 'z'
-    ss.vendored_frameworks = 'HockeySDK-iOS/HockeySDKAllFeatures/HockeySDK.embeddedframework/HockeySDK.framework'
-  end
+  s.frameworks              = 'AssetsLibrary', 'CoreGraphics', 'CoreTelephony', 'CoreText', 'MobileCoreServices', 'Photos', 'QuartzCore', 'QuickLook', 'Security', 'SystemConfiguration', 'UIKit'
+  s.libraries = 'c++', 'z'
+  s.vendored_frameworks = 'Vendor/CrashReporter.framework'
+  s.pod_target_xcconfig     = {'GCC_PREPROCESSOR_DEFINITIONS' => %{$(inherited) BITHOCKEY_VERSION="@\\"#{s.version}\\"" BITHOCKEY_C_VERSION="\\"#{s.version}\\"" BITHOCKEY_BUILD="@\\"101\\"" BITHOCKEY_C_BUILD="\\"101\\""} }
+  s.resource_bundle         = { 'HockeySDKResources' => ['Resources/*.png', 'Resources/*.lproj'] }
+  s.preserve_paths          = 'Resources', 'Support'
+  s.private_header_files  = 'Classes/*Private.h'
 
 end
